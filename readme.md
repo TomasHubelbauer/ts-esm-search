@@ -62,15 +62,40 @@ Compare with stock TypeScript: `npx typescript -p .` or `npm install --global ty
 
 Check version: `tsc -v`
 
-Run test: `tsc -p .` or `tsc index.ts` or `node TypeScript/built/local/tsc.js index.ts ` to produce `index.js` (Git-ignored)
+Run test: `tsc -p .` or `tsc index.ts` or `node TypeScript/built/local/tsc.js index.ts` to produce `index.js` (Git-ignored)
 
-- [ ] Create a TypeScript project with this module arrangement to feed to the instrumented compiler
-- [ ] Access a member of the imported object to cause an error if its type is not known - what we're fixing
-- [ ] Step through the various parts of the compiler to learn where the module resolution stuff happens
-- [ ] Try to identity the spot where to strip `\?.*$` from the import path if it matches anything
+- [x] Create a TypeScript project with this module arrangement to feed to the instrumented compiler
+- [x] Access a member of the imported object to cause an error if its type is not known - what we're fixing
+- [x] Step through the various parts of the compiler to learn where the module resolution stuff happens
+- [x] Try to identity the spot where to strip `\?.*$` from the import path if it matches anything
+
+It is a good idea to open two integrated terminals:
+
+- `node TypeScript/built/local/tsc.js index.ts` to test built changes
+- `cd TypeScript` and then run `npm run build:compiler` after making changes
+
+Use `(globalThis as any).console.log` where `console.log` won't work
+
+The flow for `node TypeScript/built/local/tsc.js index.ts` is:
+
+- TypeScript/src/tsc/tsc.ts:executeCommandLine
+- TypeScript/src/executeCommandLine/executeCommandLine.ts:executeCommandLine
+- TypeScript/src/executeCommandLine/executeCommandLine.ts:executeCommandLineWorker
+- TypeScript/src/executeCommandLine/executeCommandLine.ts:performCompilation
+- TypeScript/src/compiler/program.ts:loadWithLocalCache
+
+The method is called for each module name to resolve. In here, we have a change
+to look at what names end with a search query and strip it so that the follow-on
+logic sees the module name without it.
+
+Try both `node TypeScript/built/local/tsc.js index.ts` and with `-module esnext`
+to test both resolvers.
+
 - [ ] Figure out how to make it so that this doesn't break the `\\?\` paths https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
   - [ ] Find out if this is needed to upstream to the TypeScript project or not
 - [ ] Figure out if we need to worry about macOS paths which allow `?`
   - [ ] Decide if the way to tackle this and maybe `\\?\` is to strip and just check if the file exists
 - [ ] Submit a patch to the TypeScript project and try to get this upstreamed and eventually used in VS Code
+- [ ] Take a look at the TypeScript with extensions project and see if this could be offered
+- [ ] Take a look at the diff between stock TS and this change and see if a patch could be used
 - [ ] Rejoyce at the thought that I can now use my hacky pattern without breaking JS/TS type interference
