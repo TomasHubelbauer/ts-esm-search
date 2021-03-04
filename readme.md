@@ -91,11 +91,14 @@ logic sees the module name without it.
 Try both `node TypeScript/built/local/tsc.js index.ts` and with `-module esnext`
 to test both resolvers.
 
+- [x] Submit a patch to the TypeScript project and try to get this upstreamed and eventually used in VS Code
+
+https://github.com/microsoft/TypeScript/pull/43082
+
 - [ ] Figure out how to make it so that this doesn't break the `\\?\` paths https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
   - [ ] Find out if this is needed to upstream to the TypeScript project or not
 - [ ] Figure out if we need to worry about macOS paths which allow `?`
   - [ ] Decide if the way to tackle this and maybe `\\?\` is to strip and just check if the file exists
-- [ ] Submit a patch to the TypeScript project and try to get this upstreamed and eventually used in VS Code
 - [ ] Take a look at the TypeScript with extensions project and see if this could be offered
 - [ ] Take a look at the diff between stock TS and this change and see if a patch could be used
 - [ ] Rejoyce at the thought that I can now use my hacky pattern without breaking JS/TS type interference
