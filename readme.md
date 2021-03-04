@@ -52,7 +52,18 @@ paths with search query in them to paths would suffice.
 
 The plan of attack is:
 
-- [ ] Get TypeScript debugging to work locally: https://blog.andrewbran.ch/debugging-the-type-script-codebase
+- [x] Get TypeScript debugging to work locally: https://blog.andrewbran.ch/debugging-the-type-script-codebase
+
+`node --inspect-brk TypeScript/built/local/tsc.js -p .`
+
+In VS Code: Cmd+Shift+P > Debug: Attach to Node Process
+
+Compare with stock TypeScript: `npx typescript -p .` or `npm install --global typescript` followed by `tsc`
+
+Check version: `tsc -v`
+
+Run test: `tsc -p .` or `tsc index.ts` or `node TypeScript/built/local/tsc.js index.ts ` to produce `index.js` (Git-ignored)
+
 - [ ] Create a TypeScript project with this module arrangement to feed to the instrumented compiler
 - [ ] Access a member of the imported object to cause an error if its type is not known - what we're fixing
 - [ ] Step through the various parts of the compiler to learn where the module resolution stuff happens
