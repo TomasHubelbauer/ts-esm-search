@@ -129,10 +129,22 @@ Commands VS Code sends (from the TSServer log, ServerMode: 1 [partial semantic])
 - TypeScript/src/server/editorServices.ts:assignProjectToOpenedScriptInfo
 - No idea how this actually talks to `tsc`
 
+- [x] Take a look at the TypeScript with extensions project and see if this could be offered
+
+https://github.com/cevek/ttypescript#vs-code & https://github.com/nonara/ts-patch
+
+```sh
+cd ttypescript
+npm install
+npm run build
+```
+
+I am running to an error, the same one that is currently breaking `master`:
+https://github.com/cevek/ttypescript
+
 - [ ] Figure out how to make it so that this doesn't break the `\\?\` paths https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
   - [ ] Find out if this is needed to upstream to the TypeScript project or not
 - [ ] Figure out if we need to worry about macOS paths which allow `?`
   - [ ] Decide if the way to tackle this and maybe `\\?\` is to strip and just check if the file exists
-- [ ] Take a look at the TypeScript with extensions project and see if this could be offered
 - [ ] Take a look at the diff between stock TS and this change and see if a patch could be used
 - [ ] Rejoyce at the thought that I can now use my hacky pattern without breaking JS/TS type interference
