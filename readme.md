@@ -95,6 +95,40 @@ to test both resolvers.
 
 https://github.com/microsoft/TypeScript/pull/43082
 
+Use the VS Code workspace configuration as is in this project and ensure to
+accept the prompt to switch to the workspace TypeScript version. Alternatively,
+Cmd+Shift+P and search for TypeScript: Switch TypeScript Version.
+
+- [x] Figure out how to test `tsserver` which is the part actually used by VS Code
+
+See updates to my fork which deal with logging.
+
+Use Cmd+Shift+P and search for TypeScript: Restart TS Server and monitor the
+Output pane TypeScript channel for TSServer messages.
+
+Run `node TypeScript/built/local/tsserver.js` for CLI REPL
+
+Commands VS Code sends (from the TSServer log, ServerMode: 1 [partial semantic]):
+
+```json
+{"seq":0,"type":"request","command":"configure","arguments":{"hostInfo":"vscode","preferences":{"providePrefixAndSuffixTextForRename":true,"allowRenameOfImportPath":true,"includePackageJsonAutoImports":"auto"},"watchOptions":{}}}
+
+{"seq":1,"type":"request","command":"compilerOptionsForInferredProjects","arguments":{"options":{"module":"commonjs","target":"es2016","jsx":"preserve","strictFunctionTypes":true,"sourceMap":true,"allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true,"resolveJsonModule":true}}}
+
+{"seq":2,"type":"request","command":"updateOpen","arguments":{"changedFiles":[],"closedFiles":[],"openFiles":[{"file":"ts-esm-search/index.ts","fileContent":…}],…}
+
+{"seq":5,"type":"request","command":"geterr","arguments":{"delay":0,"files":["ts-esm-search/index.ts"]}}
+{"seq":0,"type":"event","event":"semanticDiag","body":{"file":"ts-esm-search/index.ts","diagnostics":[{"start":{"line":2,"offset":18},"end":{"line":2,"offset":32},"text":"Cannot find module './mod2?test2' or its corresponding type declarations.","code":2307,"category":"error"}]}}
+
+{"seq":7,"type":"request","command":"geterr","arguments":{"delay":0,"files":["ts-esm-search/index.ts"]}}
+```
+
+- `UpdateOpenRequest` + `UpdateOpenRequestArgs`
+- TypeScript/src/server/session.ts:2552 (`[CommandNames.UpdateOpen]`)
+- TypeScript/src/server/editorServices.ts:applyChangesInOpenFiles
+- TypeScript/src/server/editorServices.ts:assignProjectToOpenedScriptInfo
+- No idea how this actually talks to `tsc`
+
 - [ ] Figure out how to make it so that this doesn't break the `\\?\` paths https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
   - [ ] Find out if this is needed to upstream to the TypeScript project or not
 - [ ] Figure out if we need to worry about macOS paths which allow `?`
