@@ -1,5 +1,13 @@
 # TypeScript ESM URL Search Query
 
+**Note:** The work in this repository ultimately resulted in VS Code extension
+https://github.com/TomasHubelbauer/vscode-esm-url. The approach used by that
+extension is different (uses a TS Server plugin and works just by installing
+the extension with no need for a workspace version of TypeScript or to use
+ttypescript), but ultimately it still renders the work done here obsolete.
+
+---
+
 Right now, TypeScript supports the ESM syntax:
 
 ```ts
